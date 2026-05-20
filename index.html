@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -154,7 +155,7 @@ body {
   width: min(85vw, 360px);
   border-radius: 32px;
   box-shadow: 0 24px 60px rgba(0,0,0,0.18);
-  transform: scale(0.92);
+  transform: scale(0.94);
   opacity: 0;
   transition: transform 1s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 1s ease;
 }
@@ -199,7 +200,7 @@ body {
   opacity: 1;
 }
 
-/* ===================== REVEAL ANIMATIONS - МЕДЛЕННЕЕ ===================== */
+/* ===================== REVEAL ANIMATIONS ===================== */
 .reveal {
   opacity: 0;
   transform: translateY(40px);
@@ -632,26 +633,26 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-/* AUTHOR BLOCK - ТОЛЬКО ВАШ НИК */
-.author-block {
-  margin-top: 24px;
-  padding: 12px 16px;
-  text-align: right;
+/* AUTHOR BLOCK - ТОЛЬКО ВНИЗУ, ВИДЕН КОГДА ДОЛИСТАЛИ */
+.footer-author {
+  text-align: center;
+  padding: 24px 16px 32px;
   font-size: 0.6rem;
   color: var(--text-light);
-  border-top: 1px solid rgba(201,169,110,0.25);
-  letter-spacing: 0.5px;
+  border-top: 1px solid rgba(201,169,110,0.2);
+  margin-top: 20px;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: all 0.2s ease;
 }
-.author-block:active { opacity: 0.7; }
-.author-block a {
+.footer-author:active { opacity: 0.7; }
+.footer-author a {
   color: var(--gold);
   text-decoration: none;
-  font-weight: 500;
-  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-family: monospace;
+  font-size: 0.7rem;
 }
-.author-block span {
+.footer-author span {
   color: var(--green-light);
   font-family: monospace;
 }
@@ -736,13 +737,11 @@ body {
       <div class="contacts-title">Bog'lanish</div>
       <div class="contacts-desc" style="font-size:0.75rem; color:var(--text-light); margin-bottom: 16px;">Savollaringiz bo'lsa, biz bilan bog'laning</div>
       
-      <!-- TELEGRAM - для связи с заказчиком @sadikovdesigner -->
       <div class="contact-item reveal-left delay-1" id="telegramContact">
         <span class="contact-label">📱 Telegram</span>
         <span class="contact-val">@sadikovdesigner</span>
       </div>
       
-      <!-- ТЕЛЕФОН - открывает набор номера -->
       <div class="contact-item reveal-right delay-2" id="phoneContact">
         <span class="contact-label">📞 Telefon</span>
         <span class="contact-val">+998 99 841 21 14</span>
@@ -751,20 +750,20 @@ body {
       <div class="family-tag reveal-fade delay-3">
         <span>SADIKOVLAR OILASI</span>
       </div>
-      
-      <!-- ТОЛЬКО ВАШ НИК - @Dma12r -->
-      <div class="author-block" id="authorLink">
-        <span>⚡ created: </span><a href="#">@Dma12r</a>
-      </div>
     </div>
   </div></div>
+  
+  <!-- AUTHOR BLOCK - ВНИЗУ, ВИДЕН КОГДА ДОЛИСТАЛИ -->
+  <div class="footer-author" id="authorLink">
+    <span>⚡ created: </span><a href="#">@Dma12r</a>
+  </div>
 </div>
 
 <div class="music-btn" id="musicBtn"><span class="music-icon">♪</span><div class="music-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div></div>
 <div id="toastCardMsg" class="toast-card">✅ Karta raqami nusxalandi!</div>
 
 <script>
-(async function(){
+(function(){
   const MUSIC_URL = 'https://files.catbox.moe/ijpp50.mp3';
   let isMusicPlaying = false;
   const musicBtn = document.getElementById('musicBtn');
@@ -781,7 +780,7 @@ body {
   document.getElementById('copyCardOnClick').addEventListener('click', copyCard);
   document.getElementById('copyMainBtn').addEventListener('click', copyCard);
   
-  // TELEGRAM - открывает чат с @sadikovdesigner (для связи с заказчиком)
+  // TELEGRAM - для связи с заказчиком
   const telegramContact = document.getElementById('telegramContact');
   if(telegramContact) {
     telegramContact.addEventListener('click', () => {
@@ -789,7 +788,7 @@ body {
     });
   }
   
-  // ТЕЛЕФОН - открывает набор номера
+  // ТЕЛЕФОН
   const phoneContact = document.getElementById('phoneContact');
   if(phoneContact) {
     phoneContact.addEventListener('click', () => {
@@ -797,7 +796,7 @@ body {
     });
   }
   
-  // AUTHOR LINK - ВАШ НИК @Dma12r
+  // AUTHOR LINK - ваш ник @Dma12r внизу
   const authorLink = document.getElementById('authorLink');
   if(authorLink) {
     authorLink.addEventListener('click', (e) => {
@@ -806,6 +805,7 @@ body {
     });
   }
   
+  // stars canvas
   const sc = document.getElementById('starsCanvas');
   const ctx = sc.getContext('2d');
   let sw, sh, stars=[];
@@ -815,12 +815,15 @@ body {
   function animSC(){ ctx.clearRect(0,0,sw,sh); stars.forEach(s=>{s.update();s.draw();}); requestAnimationFrame(animSC); }
   initSC(); animSC(); window.addEventListener('resize', initSC);
   
+  // hero stars
   const hs = document.getElementById('heroStars');
   for(let i=0;i<22;i++){ const s=document.createElement('div'); s.className='star'; const sz=1+Math.random()*3; s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*3}s;`; hs.appendChild(s); }
   
+  // timer stars
   function initStarCanvas(id, count){ const canvas=document.getElementById(id); if(!canvas) return; const c=canvas.getContext('2d'); let stars=[]; function resize(){ const r=canvas.parentElement.getBoundingClientRect(); canvas.width=r.width; canvas.height=r.height; stars=[]; for(let i=0;i<count;i++) stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:0.8+Math.random()*2,a:0.3+Math.random()*0.7,sp:0.5+Math.random()*1.2,ph:Math.random()*Math.PI*2}); } function draw(){ c.clearRect(0,0,canvas.width,canvas.height); const t=Date.now()/1000; for(const s of stars){ const tw=0.4+0.6*(Math.sin(t*s.sp+s.ph)*0.5+0.5); c.beginPath(); c.arc(s.x,s.y,s.r,0,Math.PI*2); c.fillStyle=`rgba(255,215,150,${s.a*tw})`; c.fill(); } requestAnimationFrame(draw); } setTimeout(()=>{resize();draw();},100); window.addEventListener('resize',resize); }
   initStarCanvas('timerStarCanvas',100); initStarCanvas('starCanvas2',120);
   
+  // calendar particles
   (function(){
     const canvas = document.getElementById('calParticles');
     if (!canvas) return;
@@ -891,12 +894,15 @@ body {
   }, { threshold: 0.1 });
   if(calWrap) calObserver.observe(calWrap);
   
+  // countdown
   function tick(){ const target=new Date(2026,5,16,18,0,0); let diff=target-new Date(); if(diff<0) diff=0; document.getElementById('days').textContent=Math.floor(diff/864e5); document.getElementById('hours').textContent=Math.floor((diff%864e5)/36e5); document.getElementById('minutes').textContent=Math.floor((diff%36e5)/6e4); document.getElementById('seconds').textContent=Math.floor((diff%6e4)/1e3); }
   tick(); setInterval(tick,1000);
   
+  // scroll bar
   const scrollBar = document.getElementById('scrollBar');
   window.addEventListener('scroll',()=>{ const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight); scrollBar.style.width=(pct*100)+'%'; },{passive:true});
   
+  // reveal observer
   const observer = new IntersectionObserver(entries=>{ 
     entries.forEach(e=>{ 
       if(e.isIntersecting){ 
@@ -904,10 +910,11 @@ body {
         observer.unobserve(e.target); 
       } 
     }); 
-  }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+  }, { threshold: 0.12, rootMargin: '0px 0px -10px 0px' });
   
   document.querySelectorAll('.reveal, .reveal-fade, .reveal-left, .reveal-right, .reveal-zoom, .reveal-blur, .section-divider').forEach(el=> observer.observe(el));
   
+  // splash - плавное открытие
   const openBtn = document.getElementById('openBtn');
   const splash = document.getElementById('splash');
   const splashVideo = document.getElementById('splashVideo');
